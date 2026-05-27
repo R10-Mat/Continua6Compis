@@ -28,6 +28,10 @@ string Exp::binopToChar(BinaryOp op) {
     return "<=";
   case EQUAL_OP:
     return "==";
+  case AND_OP:
+    return "and";
+  case OR_OP:
+    return "or";
   default:
     return "?";
   }
@@ -48,6 +52,13 @@ IQExp::~IQExp() {}
 NumberExp::NumberExp(int v) : value(v) {}
 
 NumberExp::~NumberExp() {}
+
+ComplementExp::ComplementExp(Exp *exp) : e(exp) {}
+ComplementExp::~ComplementExp() {}
+
+ComparisonExp::ComparisonExp(Exp *l, Exp *r, BinaryOp o)
+    : left(l), right(r), op(o) {}
+ComparisonExp::~ComparisonExp() {}
 
 // ------------------ SqrtExp ------------------
 SqrtExp::SqrtExp(Exp *v) : value(v) {}

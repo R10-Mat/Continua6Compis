@@ -173,9 +173,33 @@ Stmt *Parser::parsestmt() {
 }
 
 Exp *Parser::parseCEXP() {
+  Exp *l = parseBF();
+  while (match(Token::AND) || match(Token::OR)) {
+    BinaryOp op;
+    if (previous->type == Token::AND) {
+      op = AND_OP;
+    } else if (previous->type == Token::OR) {
+      op = OR_OP;
+    }
+    Exp *r = parseBF();
+    l = new ComparisonExp(l, r, op);
+  }
+  return l;
+}
+Exp *Parser::parseBF() {
+  Exp *l;
+  if (match(Token::NOT)) {
+    l = parseCompExp();
+    return new ComplementExp(l);
+  } else {
+    l = parseCompExp();
+  }
+  return l;
+}
+Exp *Parser::parseCompExp() {
   Exp *l = parseIQ();
-  while (match(Token::GREATEQL) || match(Token::GREATER) ||
-         match(Token::MINORQL) || match(Token::MINOR) || match(Token::EQUAL)) {
+  if (match(Token::GREATEQL) || match(Token::GREATER) ||
+      match(Token::MINORQL) || match(Token::MINOR) || match(Token::EQUAL)) {
     BinaryOp op;
     if (previous->type == Token::GREATER) {
       op = GREATER_OP;
@@ -261,7 +285,11 @@ Exp *Parser::parseF() {
     e = parseCEXP();
     match(Token::RPAREN);
     return new SqrtExp(e);
-  } else {
+  } else if (match(Token::TRUE)) {
+    return new NumberExp(1);
+  } else if (match(Token::FALSE))
+    return new NumberExp(0);
+  else {
     throw runtime_error("Error sintáctico");
   }
 }

@@ -1,10 +1,13 @@
+fun int sumar(int a, int b):
+    var int total;
+    total = a + b;
+    return total
+endfun
+
 fun void main():
-    var int x;
-    print(9+5 <= 9);
-    print(1 == 0);
-    print(1*3 >= 9);
-    print(10 > 9);
-    print(1 < 8);
-    x = sumita(4+1,5);
-    print(x)
-endfun 
+    var int res;
+    res = sumar(10, 20);
+    print(res);
+    return 0
+endfun
+

@@ -15,6 +15,8 @@ int IdExp::accept(Visitor *visitor) { return visitor->visit(this); }
 
 int SqrtExp::accept(Visitor *visitor) { return visitor->visit(this); }
 int IQExp::accept(Visitor *visitor) { return visitor->visit(this); }
+int ComparisonExp::accept(Visitor *visitor) { return visitor->visit(this); }
+int ComplementExp::accept(Visitor *visitor) { return visitor->visit(this); }
 
 void PrintStmt::accept(Visitor *visitor) { visitor->visit(this); }
 
@@ -303,3 +305,41 @@ int EVALVisitor::visit(FcallExp *exp) {
 }
 
 void EVALVisitor::visit(ReturnStm *stm) { retornito = stm->exp->accept(this); }
+
+int PrintVisitor::visit(ComparisonExp *exp) {
+  exp->left->accept(this);
+  cout << ' ' << Exp::binopToChar(exp->op) << ' ';
+  exp->right->accept(this);
+  return 0;
+}
+
+int PrintVisitor::visit(ComplementExp *exp) {
+  cout << " not ";
+  exp->e->accept(this);
+  return 0;
+}
+
+int EVALVisitor::visit(ComparisonExp *exp) {
+  int result = 0;
+  int v1 = exp->left->accept(this);
+  int v2 = exp->right->accept(this);
+  switch (exp->op) {
+  case AND_OP:
+    result = v1 && v2;
+    break;
+  case OR_OP:
+    result = v1 || v2;
+    break;
+  }
+  return result;
+}
+
+int EVALVisitor::visit(ComplementExp *exp) {
+  int result = 0;
+  int v1 = exp->e->accept(this);
+  if (v1 == 1)
+    result = 0;
+  else if (v1 == 0)
+    result = 1;
+  return result;
+}

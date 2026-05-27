@@ -15,6 +15,8 @@ public:
   virtual int visit(NumberExp *exp) = 0;
   virtual int visit(IdExp *exp) = 0;
   virtual int visit(SqrtExp *exp) = 0;
+  virtual int visit(ComplementExp *exp) = 0;
+  virtual int visit(ComparisonExp *exp) = 0;
   virtual void visit(AsignStmt *stm) = 0;
   virtual void visit(PrintStmt *stm) = 0;
   virtual void visit(IfStmt *stm) = 0;
@@ -34,6 +36,8 @@ public:
   int visit(NumberExp *exp) override;
   int visit(SqrtExp *exp) override;
   int visit(IQExp *exp) override;
+  int visit(ComplementExp *exp) override;
+  int visit(ComparisonExp *exp) override;
   void visit(AsignStmt *stm) override;
   void visit(PrintStmt *stm) override;
   void visit(Programa *program) override;
@@ -56,6 +60,8 @@ public:
   int visit(BinaryExp *exp) override;
   int visit(NumberExp *exp) override;
   int visit(SqrtExp *exp) override;
+  int visit(ComplementExp *exp) override;
+  int visit(ComparisonExp *exp) override;
   int visit(IQExp *exp) override;
   void visit(AsignStmt *stm) override;
   void visit(PrintStmt *stm) override;

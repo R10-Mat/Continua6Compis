@@ -23,6 +23,8 @@ enum BinaryOp {
   MINOR_OP,
   MINORQL_OP,
   EQUAL_OP,
+  AND_OP,
+  OR_OP
 };
 
 // Clase abstracta Exp
@@ -78,6 +80,24 @@ public:
   int accept(Visitor *visitor);
   IQExp(Exp *l, Exp *r, BinaryOp op);
   ~IQExp();
+};
+
+class ComplementExp : public Exp {
+public:
+  Exp *e;
+  int accept(Visitor *visitor);
+  ComplementExp(Exp *e);
+  ~ComplementExp();
+};
+
+class ComparisonExp : public Exp {
+public:
+  Exp *left;
+  Exp *right;
+  BinaryOp op;
+  int accept(Visitor *visitor);
+  ComparisonExp(Exp *l, Exp *r, BinaryOp o);
+  ~ComparisonExp();
 };
 
 class Stmt {

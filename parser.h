@@ -4,7 +4,6 @@
 #include "ast.h" // Incluye las definiciones para construir el Árbol de Sintaxis Abstracta (AST)
 #include "scanner.h" // Incluye la definición del escáner (provee tokens al parser)
 
-
 class Parser {
 private:
   Scanner *scanner;          // Puntero al escáner, de donde se leen los tokens
@@ -24,6 +23,8 @@ public:
   VarDec *parseVarDec();
   Stmt *parsestmt();
   Exp *parseCEXP(); // Regla gramatical P
+  Exp *parseBF();
+  Exp *parseCompExp();
   Exp *parseIQ();
   Exp *parseE(); // Regla gramatical E
   Exp *parseT(); // Regla gramatical T
