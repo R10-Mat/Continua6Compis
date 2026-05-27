@@ -38,6 +38,11 @@ public:
     EQUAL,
     MINOR,
     GREATER,
+    AND,
+    OR,
+    TRUE,
+    FALSE,
+    NOT,
     SQRT, // sqrt
     NUM,  // Número
     ERR,  // Error
