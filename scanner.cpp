@@ -87,6 +87,8 @@ Token *Scanner::nextToken() {
       return new Token(Token::NOT, input, first, current - first);
     if (lexema == "var")
       return new Token(Token::VAR, input, first, current - first);
+    if (lexema == "break")
+      return new Token(Token::BREAK, input, first, current - first);
     else
       return new Token(Token::ID, input, first, current - first);
   }
@@ -112,9 +114,15 @@ Token *Scanner::nextToken() {
       }
       break;
     }
-    case '+':
-      token = new Token(Token::PLUS, c);
+    case '+': {
+      if (input[current + 1] == '+') {
+        current++;
+        token = new Token(Token::PLUS_PLUS, input, first, current + 1 - first);
+      } else {
+        token = new Token(Token::PLUS, c);
+      }
       break;
+    }
     case '-':
       token = new Token(Token::MINUS, c);
       break;

@@ -132,7 +132,12 @@ ostream &operator<<(ostream &outs, const Token &tok) {
   case Token::RETURN:
     outs << "TOKEN(RETURN, \"" << tok.text << "\")";
     break;
-
+  case Token::BREAK:
+    outs << "TOKEN(BREAK, \"" << tok.text << "\")";
+    break;  
+  case Token::PLUS_PLUS:
+    outs << "TOKEN(PLUS_PLUS, \"" << tok.text << "\")";
+    break;  
   case Token::END:
     outs << "TOKEN(END)";
     break;

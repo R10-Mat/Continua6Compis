@@ -166,9 +166,17 @@ Stmt *Parser::parsestmt() {
 
   else if (match(Token::ID)) {
     string texto = previous->text;
-    match(Token::ASSIGN);
-    e = parseCEXP();
-    return new AsignStmt(texto, e);
+    if (match(Token::ASSIGN)){
+      e = parseCEXP();
+      return new AsignStmt(texto, e);
+    } else if (match(Token::PLUS_PLUS)){
+      auto hola = new IncrementStmt();
+      hola->variable = texto;
+      return hola;
+    }
+  }
+  else if (match(Token::BREAK)){
+    return new BreakStmt();
   }
 }
 

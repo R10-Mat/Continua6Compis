@@ -38,6 +38,10 @@ void Fundec::accept(Visitor *visitor) { visitor->visit(this); }
 
 void Programa::accept(Visitor *visitor) { visitor->visit(this); }
 
+void IncrementStmt::accept(Visitor* visitor) {visitor->visit(this);}
+
+void BreakStmt::accept(Visitor* visitor) {visitor->visit(this);}
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 int PrintVisitor::visit(BinaryExp *exp) {
@@ -205,11 +209,16 @@ void PrintVisitor::visit(WhileStmt *stm) {
 }
 
 void EVALVisitor::visit(WhileStmt *stm) {
-  while (stm->condicion->accept(this) != 0) {
+  while (stm->condicion->accept(this) != 0 && !haybreak) {
     for (auto i : stm->cuerpodelwhile) {
       i->accept(this);
+
+      if(haybreak){
+        break;
+      }
     }
   }
+  haybreak = false;
 }
 
 void PrintVisitor::visit(VarDec *decl) {
@@ -232,6 +241,7 @@ void EVALVisitor::visit(Body *p) {
     i->accept(this);
   }
   for (auto i : p->slist) {
+    if (yaretorno) break;
     i->accept(this);
   }
   memoria.remove_level();
@@ -296,15 +306,30 @@ void EVALVisitor::visit(Fundec *fd) { fd->cuerpo->accept(this); }
 int EVALVisitor::visit(FcallExp *exp) {
   memoria.add_level();
   Fundec *f = fmemoria[exp->nombre];
-  for (int i = 0; i < f->id_parametros.size(); i++) {
-    memoria.add_var(f->id_parametros[i], exp->argumentos[i]->accept(this));
+
+  vector<int> valores_argumentos;
+  for (auto arg: exp->argumentos) {
+    valores_argumentos.push_back(arg->accept(this));
   }
+  for (int i = 0; i < f->id_parametros.size(); i++) {
+    memoria.add_var(f->id_parametros[i], valores_argumentos[i]);
+  }
+  bool bandera_anterior = yaretorno;
+  yaretorno = false;
+
   f->cuerpo->accept(this);
+
+  int resultado = retornito;
+
+  yaretorno = bandera_anterior;
   memoria.remove_level();
-  return retornito;
+  return resultado;
 }
 
-void EVALVisitor::visit(ReturnStm *stm) { retornito = stm->exp->accept(this); }
+void EVALVisitor::visit(ReturnStm *stm) {
+  retornito = stm->exp->accept(this);
+  yaretorno = true;
+}
 
 int PrintVisitor::visit(ComparisonExp *exp) {
   exp->left->accept(this);
@@ -342,4 +367,20 @@ int EVALVisitor::visit(ComplementExp *exp) {
   else if (v1 == 0)
     result = 1;
   return result;
+}
+
+void PrintVisitor::visit(IncrementStmt* stmt){
+  cout << stmt->variable << "++" << endl;
+}
+void PrintVisitor::visit(BreakStmt* stmt){
+  cout << "break" << endl;
+}
+
+void EVALVisitor::visit(IncrementStmt* stmt){
+  int valorcito = memoria.lookup(stmt->variable);
+  memoria.update(stmt->variable, valorcito + 1);
+}
+
+void EVALVisitor::visit(BreakStmt* stmt){
+  haybreak = true;
 }

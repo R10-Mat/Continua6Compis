@@ -110,3 +110,11 @@ AsignStmt::~AsignStmt() {}
 IdExp::IdExp(string v) : value(v) {}
 
 IdExp::~IdExp() {}
+
+IncrementStmt::IncrementStmt(){}
+
+IncrementStmt::~IncrementStmt(){};
+
+BreakStmt::BreakStmt(){}
+
+BreakStmt::~BreakStmt(){}

@@ -198,4 +198,19 @@ public:
   Programa();
 };
 
+class IncrementStmt: public Stmt{
+public:
+  string variable;
+  void accept(Visitor* visitor);
+  IncrementStmt();
+  ~IncrementStmt();
+};
+
+class BreakStmt: public Stmt{
+public:
+  void accept(Visitor* visitor);
+  BreakStmt();
+  ~BreakStmt();
+};
+
 #endif // AST_H

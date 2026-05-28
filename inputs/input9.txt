@@ -16,5 +16,6 @@ fun void main():
         i = procesar(i);
         i++
     endwhile;
+    print(i);
     return 0
 endfun

@@ -28,6 +28,8 @@ public:
   virtual void visit(Fundec *fd) = 0;
   virtual int visit(FcallExp *exp) = 0;
   virtual void visit(Programa *program) = 0;
+  virtual void visit(IncrementStmt* stmt) = 0;
+  virtual void visit(BreakStmt* stmt) = 0;
 };
 
 class PrintVisitor : public Visitor {
@@ -50,11 +52,15 @@ public:
   int visit(FcallExp *exp);
   void visit(Body *b);
   void imprimir(Programa *program);
+  void visit(IncrementStmt* stmt) override;
+  void visit(BreakStmt* stmt) override;
 };
 
 class EVALVisitor : public Visitor {
 public:
   Environment<int> memoria;
+  bool yaretorno = false;
+  int haybreak = false;
   int retornito;
   unordered_map<string, Fundec *> fmemoria;
   int visit(BinaryExp *exp) override;
@@ -75,6 +81,8 @@ public:
   int visit(FcallExp *exp);
   void visit(Body *b);
   void interprete(Programa *program);
+  void visit(IncrementStmt* stmt) override;
+  void visit(BreakStmt* stmt) override;
 };
 
 #endif // VISITOR_H

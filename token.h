@@ -47,6 +47,8 @@ public:
     NUM,  // Número
     ERR,  // Error
     ID,   // ID
+    BREAK,
+    PLUS_PLUS,
     END   // Fin de entrada
   };
 
